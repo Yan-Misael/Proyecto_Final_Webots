@@ -20,6 +20,20 @@ El movimiento del robot se logra mediante dos motores de corriente continua (DC)
 ### 3. Sensores
 Para lograr una navegación autónoma y conocer el estado interno y externo del robot, el controlador hace uso de dos tipos de sensores principales
 
+- **Sensores de posición (encoders)**: Se habilitaron los sensores angulares de ambas ruedas (left wheel sensor y right wheel sensor). Son esenciales para la odometría. El controlador calcula la variación del ángulo de giro en cada iteración del simulador para estimar el desplazamiento lineal ($\Delta s$) y la rotación del chasis ($\Delta \phi$). Esto permite mantener un seguimiento continuo de la posición global del robot ($x$, $y$, $\theta$) respecto a su punto de inicio.
+- **Sensores de proximidad (infrarrojos)**: El e-puck cuenta con un anillo de 8 sensores infrarrojos (ps0 a ps7), los cuales se habilitaron en su totalidad, aunque el algoritmo de control focaliza su toma de decisiones en cuatro de ellos:
+  - Sensores frontales (ps7 y ps0): Se utilizan para detectar peligro de colisión inminente (obstáculos de frente). Si el valor de lectura supera el umbral de 400.0, el robot pasa a un estado de evasión rápida.
+  - Sensores laterales (ps6 izquierdo y ps1 derecho): Sirven para la corrección de trayectoria. Si la lectura supera el umbral de 150.0 (indicando demasiada cercanía a una pared del laberinto), el controlador inyecta una     corrección en las velocidades de las ruedas para mantener al robot centrado en el pasillo.
+
+### 4. Lógica de control
+El controlador implementa una arquitectura híbrida:
+
+- **Planificación Global**: Al iniciar, transforma la matriz del laberinto utilizando el algoritmo A* para calcular la ruta óptima desde el punto de inicio hasta la meta. Los nodos lógicos se mapean a coordenadas físicas exactas (waypoints).
+- **Control Local (Máquina de Estados)**: El robot alterna entre tres estados de navegación:
+  - Rotando: Gira sobre su propio eje hasta alinearse con el ángulo del siguiente waypoint (con una tolerancia de 0.08 radianes).
+  - Avanzando: Se desplaza hacia el waypoint utilizando un control Proporcional (Kp = 2.0) sobre el error angular para ajustar el rumbo dinámicamente, al mismo tiempo que suma o resta velocidades si detecta paredes laterales.
+  - Evadiendo: Rutina de emergencia que interrumpe la navegación normal para evitar choques inminentes mediante giros bruscos.
+
 ## Descripción de los escenarios de prueba 
 En esta sección se presentan detalladamente los escenarios de prueba en el entorno de Webots . . .
 
