@@ -6,7 +6,19 @@
 El presente proyecto tiene la finalidad de crear un robot diferencial e-puck con un controlador en Python capaz de seguir una ruta premeditada en una arena del entorno Webots con distintos tipos de obstáculos, el robot debe ser capaz de sobrepasar los obstáculos y seguir la ruta desde inicio a final sin trabarse en los susodichos. Esto se logrará gracias a una robusta implementación de un controlador complejo en el lenguaje de programación de Python que permitirá al robot e-puck sobrepasar los obstáculos gracias a los distintos sensores que posee el robot se puede realizar estimaciones para los movimientos que debe seguir este, como se verá mas adelante en las explicaciones de los distintos sensores y los algoritmos que sigue el robot para tomar distancias y moverse en la arena.
 
 ## Descripción del robot, sensores y actuadores utilizados
-A continuación se presentan distintos datos del robot e-puck que son relevantes para nuestro proyecto
+A continuación se presentan distintos datos del robot e-puck que son relevantes. Para el desarrollo de este proyecto se utilizó el simulador Webots modelando un robot e-puck, el cual cuenta con una configuración de tracción diferencial. A continuación, se detallan sus características físicas, así como los sensores y actuadores que se habilitaron en el controlador para resolver la navegación en el laberinto.
+
+### 1. Características Físicas y Cinemáticas
+El modelo cinemático del robot está configurado con las siguientes dimensiones físicas fundamentales para el cálculo de la odometría
+- **Radio de las ruedas**: 0.0205m.
+- **Distancia entre las ruedas**: 0.052m.
+- **Velocidad máxima de los motores**: 6.28rad/s.
+
+### 2. Actuadores
+El movimiento del robot se logra mediante dos motores de corriente continua (DC) independientes, uno para cada rueda. Los motores de las ruedas izquierda y derecha actúan bajo control de velocidad (setVelocity). Durante la navegación normal, la velocidad base se ajusta a un 40% de la capacidad máxima (aprox. 2.51 rad/s) para el avance, y un 20% (aprox. 1.25 rad/s) durante las rutinas de rotación para asegurar precisión. En situaciones de evasión, los motores invierten su giro al 50% de su capacidad.
+
+### 3. Sensores
+Para lograr una navegación autónoma y conocer el estado interno y externo del robot, el controlador hace uso de dos tipos de sensores principales
 
 ## Descripción de los escenarios de prueba 
 En esta sección se presentan detalladamente los escenarios de prueba en el entorno de Webots . . .
