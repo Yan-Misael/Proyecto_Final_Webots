@@ -5,7 +5,29 @@
 ## Objetivo del proyecto
 El presente proyecto tiene la finalidad de crear un robot diferencial e-puck con un controlador en Python capaz de seguir una ruta premeditada en una arena del entorno Webots con distintos tipos de obstáculos, el robot debe ser capaz de sobrepasar los obstáculos y seguir la ruta desde inicio a final sin trabarse en los susodichos. Esto se logrará gracias a una robusta implementación de un controlador complejo en el lenguaje de programación de Python que permitirá al robot e-puck sobrepasar los obstáculos gracias a los distintos sensores que posee el robot se puede realizar estimaciones para los movimientos que debe seguir este, como se verá mas adelante en las explicaciones de los distintos sensores y los algoritmos que sigue el robot para tomar distancias y moverse en la arena.
 
+## Descripción del robot, sensores y actuadores utilizados
+A continuación se presentan distintos datos del robot e-puck que son relevantes para nuestro proyecto
 
+## Descripción de los escenarios de prueba 
+En esta sección se presentan detalladamente los escenarios de prueba en el entorno de Webots . . .
+
+## Explicación del algoritmo utilizado
+Para seguir con la explicación, se hablará del algoritmo que contiene el controlador del robot e-puck realizado en el lenguaje Python . . .
+
+## Pseudocódigo de la solución
+A continuación se muestra el pseudocódigo del algoritmo que se implementó . . .
+
+## Resultados obtenidos
+Se presentarán los resultados obtenidos con el robot y la ruta seguida. . .
+
+## Gráficos
+. . .
+
+## ¿Cómo ejecutar la simulación?
+Se debe seguir este paso a paso para poder ejecutar la simulación del robot en el entorno Webots
+
+## Conclusiones finales
+Para terminar, se hablará de lo que se puede concluir con el proyecto. . .
 
 
 **Ecuaciones de movimiento:**
