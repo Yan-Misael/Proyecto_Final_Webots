@@ -47,7 +47,11 @@ A continuación se muestra el pseudocódigo del algoritmo que se implementó . .
 
 Demostración de laberinto dificultad media:
 
-[![Título del video](https://youtube.com)](https://youtu.be/11VBAuZGZaM)
+<p align="center">
+  <a href="https://youtu.be/11VBAuZGZaM">
+    <img src="./imagenes/miniatura.png" alt="Ver video en YouTube" width="80%">
+  </a>
+</p>
 
 Se presentarán los resultados obtenidos con el robot y la ruta seguida. . .
 
