@@ -44,6 +44,11 @@ Para seguir con la explicación, se hablará del algoritmo que contiene el contr
 A continuación se muestra el pseudocódigo del algoritmo que se implementó . . .
 
 ## Resultados obtenidos
+
+Demostración de laberinto dificultad media:
+
+[![Título del video](https://youtube.com)](https://youtu.be/11VBAuZGZaM)
+
 Se presentarán los resultados obtenidos con el robot y la ruta seguida. . .
 
 ## Gráficos
