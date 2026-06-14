@@ -75,7 +75,99 @@ Mientras el robot se encuentra en ESTADO_AVANZANDO, opera en paralelo una sub-ru
 De manera concurrente a la navegación, el algoritmo mantiene un monitoreo constante del desempeño general para el informe de métricas final. Esto incluye el conteo de la distancia absoluta recorrida en metros, el número de instancias de riesgo crítico de colisión con las paredes, y la medición del tiempo total de ejecución desde el instante de inicio hasta que la condición de parada del objetivo final se cumple con éxito.
 
 ## Pseudocódigo de la solución
-A continuación se muestra el pseudocódigo del algoritmo que se implementó . . .
+A continuación se muestra el pseudocódigo del algoritmo que se implementó
+
+    ALGORITMO: Controlador de Navegación Híbrida e-puck
+    ENTRADA: Matriz del entorno (maze_raw), Sensores de distancia (LIDAR), Encoders, Unidad Inercial (IMU)
+    SALIDA: Velocidades del motor izquierdo (left_speed) y derecho (right_speed)
+
+    INICIO
+        Inicializar sensores, actuadores y timestep
+    
+        ruta_nodos <- A_Star(maze_raw, nodo_inicio, nodo_meta)
+        ruta_nodos <- Simplificar_Ruta(ruta_nodos)
+        ruta_fisica <- Convertir_A_Coordenadas_Continuas(ruta_nodos)
+        
+        robot_x, robot_y <- Coordenadas iniciales (ruta_fisica[0])
+        estado_actual <- ESTADO_ROTANDO
+        indice_wp <- 1
+        
+        MIENTRAS Simulación esté activa HACER:
+            dist_der, dist_frente, dist_izq <- Promediar_Sectores_LIDAR()
+            delta_rueda_izq, delta_rueda_der <- Leer_Encoders()
+            robot_phi <- Leer_Yaw_IMU()
+            
+            delta_s <- Calcular_Desplazamiento_Lineal_Promedio(delta_rueda_izq, delta_rueda_der)
+            robot_x <- robot_x + delta_s * cos(robot_phi)
+            robot_y <- robot_y + delta_s * sin(robot_phi)
+            Distancia_Total_Recorrida += |delta_s|
+            
+            SI indice_wp >= Longitud(ruta_fisica) ENTONCES
+                Detener_Motores()
+                Mostrar_Metricas_Finales()
+                ROMPER BUCLE
+            FIN SI
+            
+            objetivo_x, objetivo_y <- ruta_fisica[indice_wp]
+            error_angular <- Calcular_Diferencia_Angular(robot_x, robot_y, robot_phi, objetivo_x, objetivo_y)
+            ha_cruzado_linea <- Verificar_Cruce_Por_Producto_Punto(posición_anterior_wp, posición_actual, objetivo)
+            
+            velocidad_base <- 0
+            correccion_lateral <- 0
+            ajuste_rumbo <- 0
+            
+            SEGUN estado_actual HACER:
+                CASO ESTADO_ROTANDO:
+                    SI |error_angular| > TOLERANCIA_ANGULO ENTONCES
+                        Girar_Sobre_Eje(error_angular)
+                    SINO
+                        estado_actual <- ESTADO_AVANZANDO
+                        Reiniciar_Contador_Atasco()
+                    FIN SI
+                    
+                CASO ESTADO_RECUPERANDO:
+                    Retroceder_Velocidad_Media()
+                    SI Contador_Recuperacion_Completado() ENTONCES
+                        estado_actual <- ESTADO_ROTANDO
+                    FIN SI
+                    
+                CASO ESTADO_AVANZANDO:
+                    SI Tiempo_Evaluacion_Atasco_Cumplido() ENTONCES
+                        SI Distancia_Avanzada_Reciente() < MINIMO_PERMITIDO ENTONCES
+                            estado_actual <- ESTADO_RECUPERANDO
+                        FIN SI
+                    FIN SI
+                    
+                    SI ha_cruzado_linea ENTONCES
+                        indice_wp <- indice_wp + 1
+                        estado_actual <- ESTADO_ROTANDO
+                        Actualizar_Posicion_Al_Nodo_Objetivo()
+                    SINO
+                        ajuste_rumbo <- error_angular * Kp_rumbo
+                        velocidad_base <- Calcular_Velocidad_Por_Distancia(distancia_al_objetivo)
+                        
+                        SI Peligro_Inminente_Colision(dist_izq, dist_der) ENTONCES
+                            Contador_Riesgos += 1
+                            Evasion_Emergencia()
+                        SINO SI En_Pasillo_Estrecho(dist_izq, dist_der) ENTONCES
+                            error_centro <- dist_izq - dist_der
+                            correccion_lateral <- error_centro * Kp_pared
+                            Reducir_Velocidad_Base()
+                        FIN SI
+                    FIN SI
+            FIN SEGUN
+            
+            left_speed <- velocidad_base - ajuste_rumbo + correccion_lateral
+            right_speed <- velocidad_base + ajuste_rumbo - correccion_lateral
+            
+            Saturar_Velocidades(left_speed, right_speed, VELOCIDAD_MAXIMA)
+            Aplicar_Comandos_Motores(left_speed, right_speed)
+            
+        FIN MIENTRAS
+    FIN
+
+
+
 
 ## Resultados obtenidos
 
