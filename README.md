@@ -38,7 +38,41 @@ El controlador implementa una arquitectura híbrida:
 En esta sección se presentan detalladamente los escenarios de prueba en el entorno de Webots . . .
 
 ## Explicación del algoritmo utilizado
-Para seguir con la explicación, se hablará del algoritmo que contiene el controlador del robot e-puck realizado en el lenguaje Python . . .
+Para seguir con la explicación, se hablará del algoritmo que contiene el controlador del robot e-puck realizado en el lenguaje Python. El sistema está diseñado bajo una arquitectura de navegación híbrida, combinando la planificación de trayectorias global con un sistema reactivo de control local. Este último se sustenta en una máquina de estados finitos y la fusión de datos de los sensores integrados en el simulador Webots.
+
+### 1. Planificación de Trayectoria y Preprocesamiento:
+Antes de iniciar el movimiento físico, el sistema realiza un análisis del entorno:
+- **Búsqueda del camino óptimo**: Se hace uso del algoritmo A* para encontrar la ruta topológica más corta desde el nodo de inicio S hasta el nodo objetivo G dentro de la representación matricial del laberinto.
+- **Simplificación de ruta**: Para optimizar la ejecución cinemática, la función simplificar_ruta itera sobre el camino resultante y elimina los nodos intermedios que sean colineales. Esto reduce la ruta a un conjunto fundamental de waypoints (vértices donde obligatoriamente debe ocurrir un cambio de dirección).
+- **Mapeo al espacio continuo**: Mediante la función nodo_a_coordenada, las posiciones discretas de la matriz se traducen al espacio físico continuo en metros $(x, y)$, asumiendo dimensiones de celda de $0.15\text{ m}$.
+
+### 2. Odometría y Estimación de Pose
+El robot estima su posición global en cada paso de simulación (timestep) integrando los datos de los sensores de posición (encoders) de las ruedas y la Unidad de Medición Inercial (IMU).
+- El desplazamiento lineal individual de cada rueda se calcula multiplicando la variación del ángulo del encoder ($\Delta \theta$) por el radio de la rueda ($r = 0.02\text{ m}$). El desplazamiento lineal del centro del robot ($\Delta s$) es el promedio de ambas ruedas:
+
+$$\Delta s = \frac{r \cdot \Delta \theta_r + r \cdot \Delta \theta_l}{2}$$
+
+- La orientación global ($\phi$) se obtiene directamente del valor yaw entregado por la IMU. Esto elimina el error de deriva (drift) acumulativo que se produciría si el ángulo se calculara puramente por odometría de ruedas. Con estos datos, las coordenadas físicas globales se actualizan trigonométricamente:
+
+$$x_{t+1} = x_t + \Delta s \cos(\phi)$$
+
+$$y_{t+1} = y_t + \Delta s \sin(\phi)$$
+
+### 3. Máquina de Estados Finitos de Navegación
+El desplazamiento físico hacia los waypoints es gestionado por un autómata finito de tres estados
+
+- **ESTADO_ROTANDO**: El robot gira sobre su propio eje (spin turn) hasta alinear su orientación frontal con el ángulo deseado hacia el próximo objetivo. La velocidad diferencial se calcula proporcionalmente a la magnitud del error angular para asegurar un frenado suave al alcanzar la orientación.
+- **ESTADO_AVANZANDO**: El robot se desplaza linealmente hacia el waypoint. Utiliza un Controlador Proporcional (P) sobre el error de ángulo (ajuste_rumbo = error_angular * kp) para corregir desviaciones menores generadas por la fricción o imperfecciones del movimiento. El sistema verifica si se ha llegado al destino proyectando el vector de movimiento sobre el vector del tramo usando el producto punto ($r_x s_x + r_y s_y \geq ||s||^2$). Si la proyección cruza la línea perpendicular del objetivo, se avanza al siguiente waypoint.
+- **ESTADO_RECUPERANDO**: Es una rutina de seguridad que vigila la distancia recorrida cada 80 ciclos (aproximadamente 2.5 segundos). Si el desplazamiento neto es inferior a un umbral mínimo crítico ($2\text{ mm}$), el sistema asume que el chasis está atascado contra un obstáculo, forzando un retroceso ciego a velocidad media antes de reintentar la rotación y el avance.
+
+### 4. Control Reactivo y Centrado de Pasillo
+Mientras el robot se encuentra en ESTADO_AVANZANDO, opera en paralelo una sub-rutina de evasión dinámica alimentada por el sensor LIDAR:
+- Se promedian los arreglos de distancia de los sectores críticos del láser (izquierda, derecha y frente).
+- Corrección Lateral Continua: Si ambas paredes laterales están por debajo de un umbral de pasillo ($0.12\text{ m}$), se calcula la desviación respecto al centro exacto (error_centro = dist_izq - dist_der). Este error se multiplica por un factor de ganancia (kp_pared) para inyectar una compensación de velocidad diferencial a las ruedas, logrando un efecto de repulsión que mantiene al e-puck centrado.
+- Evasión Crítica: Si alguna distancia cae en un umbral de alerta severo ($< 0.07\text{ m}$), el sistema prioriza evitar la colisión sobre el seguimiento de la ruta, aplicando maniobras correctivas asimétricas e incrementando el contador de métricas de riesgo.
+
+### 5. Registro de Rendimiento Global
+De manera concurrente a la navegación, el algoritmo mantiene un monitoreo constante del desempeño general para el informe de métricas final. Esto incluye el conteo de la distancia absoluta recorrida en metros, el número de instancias de riesgo crítico de colisión con las paredes, y la medición del tiempo total de ejecución desde el instante de inicio hasta que la condición de parada del objetivo final se cumple con éxito.
 
 ## Pseudocódigo de la solución
 A continuación se muestra el pseudocódigo del algoritmo que se implementó . . .
