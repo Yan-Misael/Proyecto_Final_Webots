@@ -188,58 +188,39 @@ Se presentarán los resultados obtenidos con el robot y la ruta seguida. . .
 
 Para ejecutar la simulación del robot e-puck con el controlador de navegación híbrida, el entorno de Webots requiere una configuración y estructura de archivos específica. Sigue estos pasos para levantar el entorno correctamente:
 
-### 1. Estructura de Archivos
-Webots exige que cada script de controlador esté contenido dentro de una carpeta que comparta exactamente su mismo nombre.
+### 1. Requisitos Previos
+* Tener instalado el simulador **Webots** (versión R2023a o superior recomendada).
+* Tener **Python 3** instalado y configurado en el PATH de tu sistema.
 
-* Navega al directorio raíz de tu proyecto de Webots.
-* Entra a la carpeta `controllers`.
-* Crea un nuevo directorio llamado `medium_maze_controller`.
-* Guarda el código principal dentro de este directorio con el nombre `medium_maze_controller.py`.
+### 2. Obtener el Proyecto
+Clona este repositorio en tu máquina local usando Git, o descarga el archivo ZIP y extráelo:
 
-**Importante:** El script requiere dependencias externas para la planificación de la ruta. Asegúrate de mover el archivo `path_planner.py` dentro de la carpeta `medium_maze_controller` recién creada.
-
-La estructura final debería verse así:
-```text
-tu_proyecto_webots/
-└── controllers/
-    └── 
-    └── medium_maze_controller.py/
+```bash
+git clone <https://github.com/Yan-Misael/Proyecto_Final_Webots.git>
 ```
 
-### 2. Configuración en la Interfaz de Webots
-Una vez que los archivos estén en su lugar, debes enlazar el controlador con el robot físico en la simulación.
+### 3. Abrir el entorno en Webots
+- Inicia la aplicación Webots.
 
-Abre Webots y carga tu archivo de mundo (.wbt) que contiene el laberinto y el e-puck.
+- En el menú superior, dirígete a File > Open World... (o usa el atajo Ctrl + Shift + O).
 
-En el panel izquierdo, ubica el Árbol de Escena (Scene Tree).
+- Navega hasta la carpeta del proyecto que acabas de descargar.
 
-Despliega los nodos y selecciona tu robot (usualmente nombrado E-puck o Robot).
+- Entra a la carpeta worlds, selecciona el archivo ProyectoFinal.wbt y haz clic en Abrir.
 
-En la lista de propiedades, busca el campo controller.
+- Nota: Webots cargará automáticamente los modelos 3D de la carpeta laberintos gracias a las rutas relativas configuradas en el archivo del mundo.
 
-Haz doble clic en el campo controller y selecciona medium_maze_controller de la lista desplegable.
-
-Guarda los cambios del mundo (File > Save World o presiona el ícono del disquete).
-
-### 3. Verificación del Intérprete de Python
-El simulador necesita saber qué versión de Python utilizar para compilar y ejecutar tu script.
-
-Ve al menú superior y selecciona Tools > Preferences (o Webots > Preferences en macOS).
-
-En la pestaña Python Command (o en General), verifica que la ruta apunte correctamente a tu ejecutable de Python (ej. python, python3, o la ruta absoluta de tu entorno).
-
-### 4. Ejecución y Monitoreo
-Con el entorno configurado, puedes iniciar la simulación y observar las métricas.
-
-Abre la Consola (Console) en la parte inferior de la interfaz para visualizar los cálculos de ruta, la telemetría en tiempo real y las alertas de riesgo de colisión.
+### 4. Ejecutar la Simulación
+Verifica que la Consola (Console) esté abierta en la parte inferior de la pantalla para visualizar los cálculos de la ruta y la telemetría del robot.
 
 Utiliza los controles de la barra superior:
 
-Play (▶): Inicia la simulación en tiempo real.
+Play (▶): Inicia la simulación a velocidad normal.
 
-Fast Forward (⏭): Acelera la ejecución al máximo permitido por el procesador (ideal para saltar a las métricas finales).
+Fast Forward (⏭): Acelera la simulación al máximo (ideal para ir directo a la impresión de las métricas finales).
 
-Pause (⏸) / Reset (⏮): Detiene o reinicia el controlador y la posición del robot al estado inicial.
+Reset (⏮): Devuelve el simulador y el robot a su estado y posición inicial.
+
 
 
 ## Conclusiones finales
