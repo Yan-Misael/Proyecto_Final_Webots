@@ -185,7 +185,62 @@ Se presentarán los resultados obtenidos con el robot y la ruta seguida. . .
 . . .
 
 ## ¿Cómo ejecutar la simulación?
-Se debe seguir este paso a paso para poder ejecutar la simulación del robot en el entorno Webots
+
+Para ejecutar la simulación del robot e-puck con el controlador de navegación híbrida, el entorno de Webots requiere una configuración y estructura de archivos específica. Sigue estos pasos para levantar el entorno correctamente:
+
+### 1. Estructura de Archivos
+Webots exige que cada script de controlador esté contenido dentro de una carpeta que comparta exactamente su mismo nombre.
+
+* Navega al directorio raíz de tu proyecto de Webots.
+* Entra a la carpeta `controllers`.
+* Crea un nuevo directorio llamado `medium_maze_controller`.
+* Guarda el código principal dentro de este directorio con el nombre `medium_maze_controller.py`.
+
+> **Importante:** El script requiere dependencias externas para la planificación de la ruta. Asegúrate de mover el archivo `path_planner.py` dentro de la carpeta `medium_maze_controller` recién creada.
+
+La estructura final debería verse así:
+```text
+tu_proyecto_webots/
+└── controllers/
+    └── 
+    └── medium_maze_controller.py/
+```
+
+2. Configuración en la Interfaz de Webots
+Una vez que los archivos estén en su lugar, debes enlazar el controlador con el robot físico en la simulación.
+
+Abre Webots y carga tu archivo de mundo (.wbt) que contiene el laberinto y el e-puck.
+
+En el panel izquierdo, ubica el Árbol de Escena (Scene Tree).
+
+Despliega los nodos y selecciona tu robot (usualmente nombrado E-puck o Robot).
+
+En la lista de propiedades, busca el campo controller.
+
+Haz doble clic en el campo controller y selecciona medium_maze_controller de la lista desplegable.
+
+Guarda los cambios del mundo (File > Save World o presiona el ícono del disquete).
+
+3. Verificación del Intérprete de Python
+El simulador necesita saber qué versión de Python utilizar para compilar y ejecutar tu script.
+
+Ve al menú superior y selecciona Tools > Preferences (o Webots > Preferences en macOS).
+
+En la pestaña Python Command (o en General), verifica que la ruta apunte correctamente a tu ejecutable de Python (ej. python, python3, o la ruta absoluta de tu entorno).
+
+4. Ejecución y Monitoreo
+Con el entorno configurado, puedes iniciar la simulación y observar las métricas.
+
+Abre la Consola (Console) en la parte inferior de la interfaz para visualizar los cálculos de ruta, la telemetría en tiempo real y las alertas de riesgo de colisión.
+
+Utiliza los controles de la barra superior:
+
+Play (▶): Inicia la simulación en tiempo real.
+
+Fast Forward (⏭): Acelera la ejecución al máximo permitido por el procesador (ideal para saltar a las métricas finales).
+
+Pause (⏸) / Reset (⏮): Detiene o reinicia el controlador y la posición del robot al estado inicial.
+
 
 ## Conclusiones finales
 Para terminar, se hablará de lo que se puede concluir con el proyecto. . .
