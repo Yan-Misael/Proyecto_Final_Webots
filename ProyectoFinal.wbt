@@ -1,0 +1,92 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+
+WorldInfo {
+  title "ProyectoFinal"
+}
+Viewpoint {
+  orientation 0.39902237057674134 -0.3942893104594916 -0.8278388052252058 4.512849847734613
+  position 1.2568355604830823 -3.4820859436050844 6.37181416635767
+}
+E-puck {
+  translation 0.225 0.225 -6.5e-05
+  rotation 0 0 1 1.5
+  controller "medium_maze_controller"
+  turretSlot [
+    Lidar {
+    }
+    InertialUnit {
+    }
+  ]
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Solid {
+  children [
+    DEF L Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Mesh {
+        url [
+          "../../Users/iangu/Downloads/Medium_Maze.obj"
+        ]
+      }
+    }
+  ]
+  name "Medium_Maze"
+  boundingObject USE L
+}
+Solid {
+  translation -4 -5 0
+  children [
+    DEF L Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Mesh {
+        url [
+          "../../Users/iangu/Downloads/Hard_Maze.obj"
+        ]
+      }
+    }
+  ]
+  name "Hard_Maze"
+  boundingObject USE L
+}
+Solid {
+  translation -3 0 0
+  children [
+    DEF L Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Mesh {
+        url [
+          "../../Users/iangu/Downloads/Easy_Maze.obj"
+        ]
+      }
+    }
+  ]
+  name "Easy_Maze"
+  boundingObject USE L
+}
+Solid {
+  translation 2.928 2.05 0
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.5 0.5 1
+      }
+      geometry Box {
+        size 0.1 0.1 0.02
+      }
+    }
+  ]
+  name "Meta"
+}
