@@ -34,7 +34,7 @@ Solid {
       }
       geometry Mesh {
         url [
-          "../../Users/iangu/Downloads/Medium_Maze.obj"
+          "../laberintos/Medium_Maze.obj"
         ]
       }
     }
@@ -51,7 +51,7 @@ Solid {
       }
       geometry Mesh {
         url [
-          "../../Users/iangu/Downloads/Hard_Maze.obj"
+          "../laberintos/Hard_Maze.obj"
         ]
       }
     }
@@ -68,7 +68,7 @@ Solid {
       }
       geometry Mesh {
         url [
-          "../../Users/iangu/Downloads/Easy_Maze.obj"
+          "../laberintos/Easy_Maze.obj"
         ]
       }
     }
