@@ -196,7 +196,7 @@ Webots exige que cada script de controlador esté contenido dentro de una carpet
 * Crea un nuevo directorio llamado `medium_maze_controller`.
 * Guarda el código principal dentro de este directorio con el nombre `medium_maze_controller.py`.
 
-> **Importante:** El script requiere dependencias externas para la planificación de la ruta. Asegúrate de mover el archivo `path_planner.py` dentro de la carpeta `medium_maze_controller` recién creada.
+**Importante:** El script requiere dependencias externas para la planificación de la ruta. Asegúrate de mover el archivo `path_planner.py` dentro de la carpeta `medium_maze_controller` recién creada.
 
 La estructura final debería verse así:
 ```text
@@ -206,7 +206,7 @@ tu_proyecto_webots/
     └── medium_maze_controller.py/
 ```
 
-2. Configuración en la Interfaz de Webots
+### 2. Configuración en la Interfaz de Webots
 Una vez que los archivos estén en su lugar, debes enlazar el controlador con el robot físico en la simulación.
 
 Abre Webots y carga tu archivo de mundo (.wbt) que contiene el laberinto y el e-puck.
@@ -221,14 +221,14 @@ Haz doble clic en el campo controller y selecciona medium_maze_controller de la 
 
 Guarda los cambios del mundo (File > Save World o presiona el ícono del disquete).
 
-3. Verificación del Intérprete de Python
+### 3. Verificación del Intérprete de Python
 El simulador necesita saber qué versión de Python utilizar para compilar y ejecutar tu script.
 
 Ve al menú superior y selecciona Tools > Preferences (o Webots > Preferences en macOS).
 
 En la pestaña Python Command (o en General), verifica que la ruta apunte correctamente a tu ejecutable de Python (ej. python, python3, o la ruta absoluta de tu entorno).
 
-4. Ejecución y Monitoreo
+### 4. Ejecución y Monitoreo
 Con el entorno configurado, puedes iniciar la simulación y observar las métricas.
 
 Abre la Consola (Console) en la parte inferior de la interfaz para visualizar los cálculos de ruta, la telemetría en tiempo real y las alertas de riesgo de colisión.
